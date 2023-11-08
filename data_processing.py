@@ -63,6 +63,7 @@ class Table:
             temps.append(float(item1[aggregation_key]))
         return function(temps)
 
+
     def select(self, attributes_list):
         temps = []
         for item1 in self.table:
@@ -72,6 +73,8 @@ class Table:
                     dict_temp[key] = item1[key]
             temps.append(dict_temp)
         return temps
+
+
 
     def __str__(self):
         return self.table_name + ':' + str(self.table)
@@ -102,3 +105,27 @@ my_table3 = my_table1.join(my_table2, 'country')
 my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'no').filter(
     lambda x: float(x['temperature']) < 5.0)
 print(my_table3_filtered.table)
+
+# _______________________
+
+print()
+my_table4 = my_table3.filter(
+    lambda x: x['EU'] == 'yes').filter(lambda x: x['coastline'] == 'no')
+min_temp = my_table4.aggregate(lambda x: min(x), 'temperature')
+city_min = my_table4.filter(
+    lambda x: x['temperature'] == str(min)).select(['city', 'temperature'])
+max_temp = new = my_table4.aggregate(lambda x: max(x), 'temperature')
+city_max = my_table4.filter(
+    lambda x: x['temperature'] == str(max)).select(['city', 'temperature'])
+
+print(city_min)
+print(min_temp)
+print(city_max)
+print(max_temp)
+min_latitude = my_table3.aggregate(lambda x: min(x), 'latitude')
+max_latitude = my_table3.aggregate(lambda x: max(x), 'latitude')
+print(min_latitude)
+print(max_latitude)
+
+
+
