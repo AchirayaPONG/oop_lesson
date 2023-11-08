@@ -15,6 +15,24 @@ with open(os.path.join(__location__, 'Countries.csv')) as f:
     for r in rows:
         countries.append(dict(r))
 
+players = []
+with open(os.path.join(__location__, 'Players.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        players.append(dict(r))
+
+teams = []
+with open(os.path.join(__location__, 'Teams.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        teams.append(dict(r))
+
+titanic = []
+with open(os.path.join(__location__, 'Titanic.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        titanic.append(dict(r))
+
 
 class DB:
     def __init__(self):
@@ -82,50 +100,61 @@ class Table:
 
 table1 = Table('cities', cities)
 table2 = Table('countries', countries)
+table3 = Table('players', players)
+table4 = Table('teams', teams)
+table5 = Table('titanic', titanic)
 my_DB = DB()
 my_DB.insert(table1)
 my_DB.insert(table2)
+my_DB.insert(table3)
+my_DB.insert(table4)
+my_DB.insert(table5)
 my_table1 = my_DB.search('cities')
-my_table1_filtered = my_table1.filter(lambda x: x['country'] == 'Italy')
-my_table1_selected = my_table1.select(['city', 'latitude'])
-print(my_table1)
-print()
-print(my_table1_selected)
+my_table3 = my_DB.search('players')
 
-temps = []
-for item in my_table1_filtered.table:
-    temps.append(float(item['temperature']))
-print(sum(temps) / len(temps))
-print("Using aggregation")
-print(my_table1_filtered.aggregate(lambda x: sum(x) / len(x), 'temperature'))
+print(my_table3)
+print(my_table3.table_name,my_table3.table)
 
-print()
-my_table2 = my_DB.search('countries')
-my_table3 = my_table1.join(my_table2, 'country')
-my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'no').filter(
-    lambda x: float(x['temperature']) < 5.0)
-print(my_table3_filtered.table)
-
-# _______________________
-
-print()
-my_table4 = my_table3.filter(
-    lambda x: x['EU'] == 'yes').filter(lambda x: x['coastline'] == 'no')
-min_temp = my_table4.aggregate(lambda x: min(x), 'temperature')
-city_min = my_table4.filter(
-    lambda x: x['temperature'] == str(min)).select(['city', 'temperature'])
-max_temp = new = my_table4.aggregate(lambda x: max(x), 'temperature')
-city_max = my_table4.filter(
-    lambda x: x['temperature'] == str(max)).select(['city', 'temperature'])
-
-print(city_min)
-print(min_temp)
-print(city_max)
-print(max_temp)
-min_latitude = my_table3.aggregate(lambda x: min(x), 'latitude')
-max_latitude = my_table3.aggregate(lambda x: max(x), 'latitude')
-print(min_latitude)
-print(max_latitude)
+# my_table1_filtered = my_table1.filter(lambda x: x['country'] == 'Italy')
+# my_table1_selected = my_table1.select(['city', 'latitude'])
+# print(my_table1)
+# print()
+# print(my_table1_selected)
+#
+# temps = []
+# for item in my_table1_filtered.table:
+#     temps.append(float(item['temperature']))
+# print(sum(temps) / len(temps))
+# print("Using aggregation")
+# print(my_table1_filtered.aggregate(lambda x: sum(x) / len(x), 'temperature'))
+#
+# print()
+# my_table2 = my_DB.search('countries')
+# my_table3 = my_table1.join(my_table2, 'country')
+# my_table3_filtered = my_table3.filter(lambda x: x['EU'] == 'no').filter(
+#     lambda x: float(x['temperature']) < 5.0)
+# print(my_table3_filtered.table)
+#
+# # _______________________
+#
+# print()
+# my_table4 = my_table3.filter(
+#     lambda x: x['EU'] == 'yes').filter(lambda x: x['coastline'] == 'no')
+# min_temp = my_table4.aggregate(lambda x: min(x), 'temperature')
+# city_min = my_table4.filter(
+#     lambda x: x['temperature'] == str(min)).select(['city', 'temperature'])
+# max_temp = new = my_table4.aggregate(lambda x: max(x), 'temperature')
+# city_max = my_table4.filter(
+#     lambda x: x['temperature'] == str(max)).select(['city', 'temperature'])
+#
+# print(city_min)
+# print(min_temp)
+# print(city_max)
+# print(max_temp)
+# min_latitude = my_table3.aggregate(lambda x: min(x), 'latitude')
+# max_latitude = my_table3.aggregate(lambda x: max(x), 'latitude')
+# print(min_latitude)
+# print(max_latitude)
 
 
 
